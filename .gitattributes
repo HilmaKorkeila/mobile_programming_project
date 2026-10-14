@@ -1,0 +1,31 @@
+# Set default behavior to automatic normalization
+* text=auto
+
+# Force LF for all common Node.js text files and source code
+*.js     text eol=lf
+*.cjs    text eol=lf
+*.mjs    text eol=lf
+*.ts     text eol=lf
+*.tsx    text eol=lf
+*.json   text eol=lf
+*.yml    text eol=lf
+*.yaml   text eol=lf
+*.md     text eol=lf
+*.css    text eol=lf
+*.scss   text eol=lf
+*.html   text eol=lf
+
+# Explicitly handle package manager files to prevent lockfile churn
+package-lock.json text eol=lf
+yarn.lock         text eol=lf
+pnpm-lock.yaml    text eol=lf
+
+# Force CRLF for Windows script files if your project uses them
+*.bat    text eol=crlf
+*.cmd    text eol=crlf
+
+# Ensure binary files are untouched
+*.png    binary
+*.jpg    binary
+*.ico    binary
+*.woff2  binary
