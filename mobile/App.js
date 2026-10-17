@@ -1,24 +1,28 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 import { DatabaseProvider } from './db/DatabaseProvider';
+import ProjectsScreen from './screens/ProjectsScreen';
+import DashboardScreen from './screens/DashboardScreen';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
     // DatabaseProvider migrates local database before rendering anything else
     <DatabaseProvider>
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <StatusBar style="auto" />
-      </View>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="Projects"
+          screenOptions={{ headerShown: false }}
+        >
+          <Stack.Screen name="Projects" component={ProjectsScreen} />
+          <Stack.Screen name="Dashboard" component={DashboardScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+
+      <StatusBar style="auto" />
     </DatabaseProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
