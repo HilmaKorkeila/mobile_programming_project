@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, FlatList, StyleSheet, Pressable } from 'react-native';
 import { useLiveQuery } from 'drizzle-orm/expo-sqlite';
 import { eq } from 'drizzle-orm';
+import * as Crypto from 'expo-crypto';
 
 // Import database connection and projects table
 import { db } from '../db';
@@ -27,12 +28,30 @@ export default function ProjectsScreen({ navigation }) {
     // Stop if the project cannot be found
     if (!project) return;
 
-    // Update the favorite status in the SQLite database
-    // Change true to false or false to true
-    await db
-      .update(projects)
-      .set({ is_favourite: !project.is_favourite })
-      .where(eq(projects.id, id));
+    // Remove favorite status from all projects
+    await db.update(projects).set({ is_favourite: false });
+
+    // Set the selected project as favorite if it was not already favorite
+    if (!project.is_favourite) {
+      await db
+        .update(projects)
+        .set({ is_favourite: true })
+        .where(eq(projects.id, id));
+    }
+  };
+
+  // Function for creating a new project
+  const addProject = async (name, description) => {
+    // Save the new project to the SQLite database
+    await db.insert(projects).values({
+      id: Crypto.randomUUID(),
+      name: name,
+      description: description,
+      createdAt: Date.now(),
+    });
+
+    // Close the modal after saving
+    setModalVisible(false);
   };
 
   return (
@@ -72,14 +91,7 @@ export default function ProjectsScreen({ navigation }) {
       <AddProjectModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
-        onSave={(name, description) => {
-          // Temporarily display the project data in the console
-          // SQLite saving will be added later
-          console.log('New project:', name, description);
-
-          // Close the modal after pressing Create project
-          setModalVisible(false);
-        }}
+        onSave={addProject}
       />
     </View>
   );
