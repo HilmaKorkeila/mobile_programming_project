@@ -6,6 +6,7 @@ import { DatabaseProvider } from './db/DatabaseProvider';
 import ProjectsScreen from './screens/ProjectsScreen';
 import DashboardScreen from './screens/DashboardScreen';
 import BudgetScreen from './screens/BudgetScreen';
+import TasksScreen from './screens/TasksScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,7 @@ export default function App() {
           <Stack.Screen name="Projects" component={ProjectsScreen} />
           <Stack.Screen name="Dashboard" component={DashboardScreen} />
           <Stack.Screen name="Budget" component={BudgetScreen} />
+          <Stack.Screen name="Tasks" component={TasksScreen} />
         </Stack.Navigator>
       </NavigationContainer>
 

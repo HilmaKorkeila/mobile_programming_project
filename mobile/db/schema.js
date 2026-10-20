@@ -31,5 +31,5 @@ export const tasks = sqliteTable('tasks', {
     .references(() => projects.id, { onDelete: 'cascade' }),
   name: text('name', { length: 50 }).notNull(),
   createdAt: integer('created_at').notNull(),
-  status: integer('is_favourite', { mode: 'boolean' }).default(false).notNull(),
+  status: text('status').default('Not complete').notNull(),
 });
