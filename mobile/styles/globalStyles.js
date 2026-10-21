@@ -26,6 +26,13 @@ export const globalStyles = StyleSheet.create({
     fontWeight: typography.weights.medium,
     fontSize: typography.sizes.body,
   },
+  list: {
+    backgroundColor: colors.listBackground,
+    borderWidth: 0,
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 10,
+  },
 
   // Colors
   colorDanger: {

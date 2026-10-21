@@ -5,6 +5,7 @@ import { globalStyles as gs } from '../styles/globalStyles';
 
 // Components
 import NavigationCard from '../components/NavigationCard';
+import ProjectOverviewPanel from '../components/ProjectOverviewPanel';
 
 export default function DashboardScreen({ route, navigation }) {
   const { activeProject, deleteProject } = useActiveProject();
@@ -81,6 +82,8 @@ export default function DashboardScreen({ route, navigation }) {
           console.log('test');
         }}
       />
+
+      <ProjectOverviewPanel />
 
       {/* Button for removing the selected project */}
       <Pressable style={[gs.button, gs.buttonDanger]} onPress={confirmDelete}>
