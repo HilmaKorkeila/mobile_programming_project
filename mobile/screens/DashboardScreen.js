@@ -54,7 +54,7 @@ export default function DashboardScreen({ route, navigation }) {
         title="Budget"
         description={centsToEuros(activeProject?.budget)}
         onPress={() => {
-          console.log('test');
+          navigation.navigate('Budget');
         }}
       />
 
@@ -63,7 +63,7 @@ export default function DashboardScreen({ route, navigation }) {
         title="Expenses"
         description={centsToEuros(activeProject?.totalExpenses)}
         onPress={() => {
-          console.log('test');
+          navigation.navigate('Expenses');
         }}
       />
 
@@ -79,7 +79,7 @@ export default function DashboardScreen({ route, navigation }) {
             : 'No tasks'
         }
         onPress={() => {
-          console.log('test');
+          navigation.navigate('Tasks');
         }}
       />
 
