@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { globalStyles as gs } from '../styles/globalStyles';
-import { activeProject, useActiveProject } from '../db/ActiveProjectContext';
+import { useActiveProject } from '../db/ActiveProjectContext';
 
 export default function ProjectOverviewPanel() {
   const { activeProject } = useActiveProject();
