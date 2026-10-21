@@ -37,6 +37,13 @@ export function ActiveProjectProvider({ children }) {
     [targetId],
   );
 
+  // Calculate total sum of expenses
+  const totalExpenses =
+    expensesRows?.reduce(
+      (sum, expense) => sum + Number(expense.amount || 0),
+      0,
+    ) || 0;
+
   // Combine projectRows, tasksRows and expensesRows to one object
   const activeProject =
     activeProjectId && projectRows?.[0]
@@ -44,6 +51,7 @@ export function ActiveProjectProvider({ children }) {
           ...projectRows[0],
           tasks: tasksRows || [],
           expenses: expensesRows || [],
+          totalExpenses,
         }
       : null;
 
