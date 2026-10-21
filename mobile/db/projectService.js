@@ -1,7 +1,11 @@
 import * as Crypto from 'expo-crypto';
 import { eq } from 'drizzle-orm';
 import { db } from './index';
-import { expenses } from './schema';
+import { projects, expenses } from './schema';
+
+export async function deleteProjectFromDb(projectId) {
+  await db.delete(projects).where(eq(projects.id, projectId));
+}
 
 export async function insertExpenseToDb(projectId, name, amount) {
   await db.insert(expenses).values({

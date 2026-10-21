@@ -1,6 +1,7 @@
 import { createContext, useContext, useState } from 'react';
 import { useLiveQuery } from 'drizzle-orm/expo-sqlite';
 import {
+  deleteProjectFromDb,
   insertExpenseToDb,
   updateExpenseInDb,
   deleteExpenseFromDb,
@@ -50,6 +51,11 @@ export function ActiveProjectProvider({ children }) {
     setActiveProjectId(id);
   };
 
+  const deleteProject = async (projectId) => {
+    if (!activeProjectId) return;
+    await deleteProjectFromDb(projectId);
+  };
+
   const createExpense = async (name, amount) => {
     if (!activeProjectId) return;
     await insertExpenseToDb(activeProjectId, name, amount);
@@ -68,6 +74,7 @@ export function ActiveProjectProvider({ children }) {
       value={{
         activeProject,
         selectProject,
+        deleteProject,
         createExpense,
         editExpense,
         deleteExpense,
