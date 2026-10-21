@@ -4,6 +4,8 @@ import { useLiveQuery } from 'drizzle-orm/expo-sqlite';
 import { eq } from 'drizzle-orm';
 import * as Crypto from 'expo-crypto';
 
+import { useActiveProject } from '../db/ActiveProjectContext';
+
 // Import database connection and projects table
 import { db } from '../db';
 import { projects } from '../db/schema';
@@ -13,6 +15,8 @@ import ProjectCard from '../components/ProjectCard';
 import AddProjectModal from '../components/AddProjectModal';
 
 export default function ProjectsScreen({ navigation }) {
+  const { selectProject, activeProject } = useActiveProject();
+
   // State for controlling the visibility of the add project modal
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -71,9 +75,10 @@ export default function ProjectsScreen({ navigation }) {
           <ProjectCard
             project={item}
             onToggleFavorite={toggleFavorite}
-            onPress={() =>
-              navigation.navigate('Dashboard', { projectId: item.id })
-            }
+            onPress={async () => {
+              await selectProject(item.id);
+              navigation.navigate('Dashboard');
+            }}
           />
         )}
         ListEmptyComponent={

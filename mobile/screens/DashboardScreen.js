@@ -2,18 +2,21 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable, Alert } from 'react-native';
 import { eq } from 'drizzle-orm';
 
+import {
+  ActiveProjectProvider,
+  useActiveProject,
+} from '../db/ActiveProjectContext';
+
 // Import database connection and projects table
 import { db } from '../db';
 import { projects } from '../db/schema';
 
 export default function DashboardScreen({ route, navigation }) {
-  // Get the selected project ID from navigation
-  const { projectId } = route.params;
-
+  const { activeProject } = useActiveProject();
   // Function for deleting a project from the database
   const deleteProject = async () => {
     // Delete the selected project using its ID
-    await db.delete(projects).where(eq(projects.id, projectId));
+    // await db.delete(projects).where(eq(projects.id, projectId));
 
     // Return to the projects screen after deleting
     navigation.goBack();
@@ -42,7 +45,7 @@ export default function DashboardScreen({ route, navigation }) {
   return (
     <View style={styles.container}>
       {/* Main title of the dashboard */}
-      <Text style={styles.title}>Dashboard</Text>
+      <Text style={styles.title}>Dashboard {activeProject?.name}</Text>
 
       {/* Button for removing the selected project */}
       <Pressable style={styles.removeButton} onPress={confirmDelete}>
