@@ -1,6 +1,10 @@
 import { View, Text, StyleSheet, Pressable, Alert } from 'react-native';
-
 import { useActiveProject } from '../db/ActiveProjectContext';
+
+import { globalStyles as gs } from '../styles/globalStyles';
+
+// Components
+import NavigationCard from '../components/NavigationCard';
 
 export default function DashboardScreen({ route, navigation }) {
   const { activeProject, deleteProject } = useActiveProject();
@@ -11,6 +15,10 @@ export default function DashboardScreen({ route, navigation }) {
     await deleteProject(activeProject.id);
     // Return to the projects screen after deleting
     navigation.goBack();
+  };
+
+  const centsToEuros = (amount) => {
+    return (amount / 100).toFixed(2) + ' €';
   };
 
   // Function for confirming project deletion
@@ -35,12 +43,51 @@ export default function DashboardScreen({ route, navigation }) {
 
   return (
     <View style={styles.container}>
-      {/* Main title of the dashboard */}
-      <Text style={styles.title}>Dashboard {activeProject?.name}</Text>
+      {/* Small heading above the main title */}
+      <Text style={styles.smallTitle}>DASHBOARD</Text>
+      {/* Main title of the screen */}
+      <Text style={styles.title}>{activeProject?.name}</Text>
+
+      {/* Budget */}
+      <NavigationCard
+        title="Budget"
+        description={centsToEuros(activeProject?.budget)}
+        onPress={() => {
+          console.log('test');
+        }}
+      />
+
+      {/* Expenses */}
+      <NavigationCard
+        title="Expenses"
+        description={centsToEuros(activeProject?.totalExpenses)}
+        onPress={() => {
+          console.log('test');
+        }}
+      />
+
+      {/* Tasks */}
+      <NavigationCard
+        title="Tasks"
+        description="WIP"
+        onPress={() => {
+          console.log('test');
+        }}
+      />
 
       {/* Button for removing the selected project */}
-      <Pressable style={styles.removeButton} onPress={confirmDelete}>
-        <Text style={styles.removeButtonText}>Remove project</Text>
+      <Pressable style={[gs.button, gs.buttonDanger]} onPress={confirmDelete}>
+        <Text style={[gs.colorDanger, gs.buttonText]}>Remove project</Text>
+      </Pressable>
+
+      {/* Button going back to project list */}
+      <Pressable
+        style={[gs.button, gs.buttonSecondary]}
+        onPress={() => {
+          navigation.goBack();
+        }}
+      >
+        <Text style={[gs.colorTextMain, gs.buttonText]}>Back to projects</Text>
       </Pressable>
     </View>
   );
@@ -64,20 +111,11 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
 
-  // Button for removing a project
-  removeButton: {
-    backgroundColor: '#F5EAE7',
-    borderColor: '#A65F58',
-    borderWidth: 1,
-    borderRadius: 10,
-    padding: 14,
-    alignItems: 'center',
-  },
-
-  // Text inside the remove project button
-  removeButtonText: {
-    color: '#A65F58',
-    fontSize: 14,
-    fontWeight: '500',
+  // Small heading above the main title
+  smallTitle: {
+    fontSize: 12,
+    fontWeight: '400',
+    color: '#242B28',
+    marginBottom: 8,
   },
 });
