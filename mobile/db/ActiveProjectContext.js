@@ -44,6 +44,15 @@ export function ActiveProjectProvider({ children }) {
       0,
     ) || 0;
 
+  // Calculate task statistics: total, not completed, in progress and completed amounts
+  const tasksTotal = tasksRows?.length || 0;
+  const tasksNotComplete =
+    tasksRows?.filter((task) => task.status == 'Not complete').length || 0;
+  const tasksInProgress =
+    tasksRows?.filter((task) => task.status == 'In progress').length || 0;
+  const tasksCompleted =
+    tasksRows?.filter((task) => task.status == 'Completed').length || 0;
+
   // Combine projectRows, tasksRows and expensesRows to one object
   const activeProject =
     activeProjectId && projectRows?.[0]
@@ -52,6 +61,12 @@ export function ActiveProjectProvider({ children }) {
           tasks: tasksRows || [],
           expenses: expensesRows || [],
           totalExpenses,
+          taskStats: {
+            total: tasksTotal,
+            notComplete: tasksNotComplete,
+            inProgress: tasksInProgress,
+            completed: tasksCompleted,
+          },
         }
       : null;
 

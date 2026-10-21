@@ -69,7 +69,14 @@ export default function DashboardScreen({ route, navigation }) {
       {/* Tasks */}
       <NavigationCard
         title="Tasks"
-        description="WIP"
+        description={
+          activeProject?.taskStats.total
+            ? activeProject?.taskStats.completed +
+              '/' +
+              activeProject?.taskStats.total +
+              ' completed'
+            : 'No tasks'
+        }
         onPress={() => {
           console.log('test');
         }}
