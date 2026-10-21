@@ -1,0 +1,4 @@
+# Ignore npm files strictly at repository root
+/package.json
+/package-lock.json
+/node_modules/
