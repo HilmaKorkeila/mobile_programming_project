@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { View, Text, FlatList, StyleSheet, Pressable } from 'react-native';
 import { useLiveQuery } from 'drizzle-orm/expo-sqlite';
-import { eq } from 'drizzle-orm';
-import * as Crypto from 'expo-crypto';
+import {
+  insertProjectToDb,
+  toggleProjectFavouriteInDb,
+} from '../db/projectService';
 
 import { useActiveProject } from '../db/ActiveProjectContext';
 
@@ -15,7 +17,7 @@ import ProjectCard from '../components/ProjectCard';
 import AddProjectModal from '../components/AddProjectModal';
 
 export default function ProjectsScreen({ navigation }) {
-  const { selectProject, activeProject } = useActiveProject();
+  const { selectProject } = useActiveProject();
 
   // State for controlling the visibility of the add project modal
   const [modalVisible, setModalVisible] = useState(false);
@@ -25,34 +27,14 @@ export default function ProjectsScreen({ navigation }) {
   const { data: projectList = [] } = useLiveQuery(db.select().from(projects));
 
   // Function for changing the favorite status of a project
-  const toggleFavorite = async (id) => {
-    // Find the selected project from the project list using its ID
-    const project = projectList.find((item) => item.id === id);
-
-    // Stop if the project cannot be found
-    if (!project) return;
-
-    // Remove favorite status from all projects
-    await db.update(projects).set({ is_favourite: false });
-
-    // Set the selected project as favorite if it was not already favorite
-    if (!project.is_favourite) {
-      await db
-        .update(projects)
-        .set({ is_favourite: true })
-        .where(eq(projects.id, id));
-    }
+  const handleToggleFavorite = async (id) => {
+    await toggleProjectFavouriteInDb(id);
   };
 
   // Function for creating a new project
-  const addProject = async (name, description) => {
+  const handleAddProject = async (name, description) => {
     // Save the new project to the SQLite database
-    await db.insert(projects).values({
-      id: Crypto.randomUUID(),
-      name: name,
-      description: description,
-      createdAt: Date.now(),
-    });
+    await insertProjectToDb(name, description);
 
     // Close the modal after saving
     setModalVisible(false);
@@ -74,7 +56,7 @@ export default function ProjectsScreen({ navigation }) {
         renderItem={({ item }) => (
           <ProjectCard
             project={item}
-            onToggleFavorite={toggleFavorite}
+            onToggleFavorite={handleToggleFavorite}
             onPress={async () => {
               await selectProject(item.id);
               navigation.navigate('Dashboard');
@@ -96,7 +78,7 @@ export default function ProjectsScreen({ navigation }) {
       <AddProjectModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
-        onSave={addProject}
+        onSave={handleAddProject}
       />
     </View>
   );

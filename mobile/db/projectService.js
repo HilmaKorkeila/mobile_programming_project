@@ -1,7 +1,30 @@
 import * as Crypto from 'expo-crypto';
-import { eq } from 'drizzle-orm';
+import { eq, ne, not } from 'drizzle-orm';
 import { db } from './index';
 import { projects, expenses } from './schema';
+
+export async function insertProjectToDb(name, description) {
+  await db.insert(projects).values({
+    id: Crypto.randomUUID(),
+    name: name,
+    description: description,
+    createdAt: Date.now(),
+  });
+}
+
+export async function toggleProjectFavouriteInDb(projectId) {
+  // Remove favorite status from all other projects
+  await db
+    .update(projects)
+    .set({ is_favourite: false })
+    .where(ne(projects.id, projectId));
+
+  // Toggle is_favourite status from selected project
+  await db
+    .update(projects)
+    .set({ is_favourite: not(projects.is_favourite) })
+    .where(eq(projects.id, projectId));
+}
 
 export async function deleteProjectFromDb(projectId) {
   await db.delete(projects).where(eq(projects.id, projectId));
