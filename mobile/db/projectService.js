@@ -1,7 +1,7 @@
 import * as Crypto from 'expo-crypto';
 import { eq, ne, not } from 'drizzle-orm';
 import { db } from './index';
-import { projects, expenses } from './schema';
+import { projects, expenses, tasks } from './schema';
 
 export async function insertProjectToDb(name, description) {
   await db.insert(projects).values({
@@ -66,5 +66,31 @@ export async function updateExpenseInDb(expenseId, updatedFields) {
 }
 
 export async function deleteExpenseFromDb(expenseId) {
+  if (!expenseId) return;
   await db.delete(expenses).where(eq(expenses.id, expenseId));
+}
+
+export async function insertTaskToDb(projectId, name) {
+  await db.insert(tasks).values({
+    id: Crypto.randomUUID(),
+    projectId: projectId,
+    name,
+    createdAt: Date.now(),
+  });
+}
+
+// ...() is called a conditional spread pattern
+export async function updateTaskInDb(taskId, updatedFields) {
+  await db
+    .update(tasks)
+    .set({
+      ...(updatedFields.name && { name: updatedFields.name }),
+      ...(updatedFields.status && { status: updatedFields.status }),
+    })
+    .where(eq(tasks.id, taskId));
+}
+
+export async function deleteTaskFromDb(taskId) {
+  if (!taskId) return;
+  await db.delete(tasks).where(eq(tasks.id, taskId));
 }

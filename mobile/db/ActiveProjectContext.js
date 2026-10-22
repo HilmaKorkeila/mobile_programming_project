@@ -6,6 +6,9 @@ import {
   updateExpenseInDb,
   deleteExpenseFromDb,
   updateProjectInDb,
+  insertTaskToDb,
+  deleteTaskFromDb,
+  updateTaskInDb,
 } from './projectService';
 import { db } from './index';
 import { projects, tasks, expenses } from './schema';
@@ -48,11 +51,11 @@ export function ActiveProjectProvider({ children }) {
   // Calculate task statistics: total, not completed, in progress and completed amounts
   const tasksTotal = tasksRows?.length || 0;
   const tasksNotComplete =
-    tasksRows?.filter((task) => task.status == 'Not complete').length || 0;
+    tasksRows?.filter((task) => task.status === 'Not complete').length || 0;
   const tasksInProgress =
-    tasksRows?.filter((task) => task.status == 'In progress').length || 0;
+    tasksRows?.filter((task) => task.status === 'In progress').length || 0;
   const tasksCompleted =
-    tasksRows?.filter((task) => task.status == 'Completed').length || 0;
+    tasksRows?.filter((task) => task.status === 'Completed').length || 0;
 
   // Combine projectRows, tasksRows and expensesRows to one object
   const activeProject =
@@ -98,6 +101,19 @@ export function ActiveProjectProvider({ children }) {
     await deleteExpenseFromDb(expenseId);
   };
 
+  const createTask = async (name) => {
+    if (!activeProjectId) return;
+    await insertTaskToDb(activeProjectId, name);
+  };
+
+  const editTask = async (taskId, updatedFields) => {
+    await updateTaskInDb(taskId, updatedFields);
+  };
+
+  const deleteTask = async (taskId) => {
+    await deleteTaskFromDb(taskId);
+  };
+
   return (
     <ActiveProjectContext.Provider
       value={{
@@ -108,6 +124,9 @@ export function ActiveProjectProvider({ children }) {
         createExpense,
         editExpense,
         deleteExpense,
+        createTask,
+        editTask,
+        deleteTask,
       }}
     >
       {children}

@@ -1,21 +1,16 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { View, Text, StyleSheet, Pressable, FlatList } from 'react-native';
-import { useLiveQuery } from 'drizzle-orm/expo-sqlite';
-import { eq } from 'drizzle-orm';
-import * as Crypto from 'expo-crypto';
 import { Feather } from '@expo/vector-icons';
 
-// Import database connection and tables
-import { db } from '../db';
-import { projects, tasks } from '../db/schema';
+import { useActiveProject } from '../db/ActiveProjectContext';
 
 // Import components
 import AddTaskModal from '../components/AddTaskModal';
 import EditTaskModal from '../components/EditTaskModal';
 
-export default function TasksScreen({ route, navigation }) {
-  // Get the selected project ID
-  const { projectId } = route.params;
+export default function TasksScreen({ navigation }) {
+  const { activeProject, createTask, editTask, deleteTask } =
+    useActiveProject();
 
   // Controls the visibility of the add task modal
   const [addModalVisible, setAddModalVisible] = useState(false);
@@ -26,32 +21,6 @@ export default function TasksScreen({ route, navigation }) {
   // Store the selected task for editing
   const [selectedTask, setSelectedTask] = useState(null);
 
-  // Get the selected project from SQLite
-  const { data: projectList = [] } = useLiveQuery(
-    db.select().from(projects).where(eq(projects.id, projectId)),
-  );
-
-  // Get the selected project's tasks from SQLite
-  const { data: taskList = [] } = useLiveQuery(
-    db.select().from(tasks).where(eq(tasks.projectId, projectId)),
-  );
-
-  // Get project name
-  let projectName = '';
-
-  if (projectList.length > 0) {
-    projectName = projectList[0].name;
-  }
-
-  // Calculate completed tasks
-  let completedTasks = 0;
-
-  for (let task of taskList) {
-    if (task.status === 'Completed') {
-      completedTasks = completedTasks + 1;
-    }
-  }
-
   // Function for opening the edit task modal
   const openEditModal = (task) => {
     setSelectedTask(task);
@@ -59,30 +28,18 @@ export default function TasksScreen({ route, navigation }) {
   };
 
   // Function for adding a new task
-  const addTask = async (taskName) => {
+  const handeAddTask = async (taskName) => {
     // Save the new task to SQLite
-    await db.insert(tasks).values({
-      id: Crypto.randomUUID(),
-      projectId: projectId,
-      name: taskName,
-      createdAt: Date.now(),
-      status: 'Not complete',
-    });
+    await createTask(taskName);
 
     // Close the add task modal
     setAddModalVisible(false);
   };
 
   // Function for updating a task
-  const updateTask = async (taskName, taskStatus) => {
+  const handleUpdateTask = async (taskName, taskStatus) => {
     // Save the updated task name and status to SQLite
-    await db
-      .update(tasks)
-      .set({
-        name: taskName,
-        status: taskStatus,
-      })
-      .where(eq(tasks.id, selectedTask.id));
+    await editTask(selectedTask.id, { name: taskName, status: taskStatus });
 
     // Close the edit task modal
     setEditModalVisible(false);
@@ -90,9 +47,9 @@ export default function TasksScreen({ route, navigation }) {
   };
 
   // Function for deleting a task
-  const deleteTask = async () => {
+  const handleDeleteTask = async () => {
     // Delete the selected task from SQLite
-    await db.delete(tasks).where(eq(tasks.id, selectedTask.id));
+    await deleteTask(selectedTask.id);
 
     // Close the edit task modal
     setEditModalVisible(false);
@@ -110,7 +67,7 @@ export default function TasksScreen({ route, navigation }) {
         <Text style={styles.cardTitle}>TASKS</Text>
 
         {/* Project name */}
-        <Text style={styles.projectName}>{projectName}</Text>
+        <Text style={styles.projectName}>{activeProject?.name}</Text>
 
         {/* Tasks list title */}
         <Text style={styles.label}>Tasks list</Text>
@@ -118,18 +75,18 @@ export default function TasksScreen({ route, navigation }) {
         {/* Tasks list */}
         <FlatList
           style={styles.taskList}
-          data={taskList}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
+          data={activeProject?.tasks ?? []}
+          keyExtractor={(task) => task.id}
+          renderItem={({ item: task }) => (
             <Pressable
               style={styles.taskItem}
-              onPress={() => openEditModal(item)}
+              onPress={() => openEditModal(task)}
             >
               {/* Task name */}
-              <Text style={styles.taskText}>{item.name}</Text>
+              <Text style={styles.taskText}>{task?.name}</Text>
 
               {/* Current task status */}
-              <Text style={styles.taskStatus}>{item.status}</Text>
+              <Text style={styles.taskStatus}>{task?.status}</Text>
 
               {/* Edit task icon */}
               <Feather name="edit-2" size={18} color="#285943" />
@@ -139,7 +96,12 @@ export default function TasksScreen({ route, navigation }) {
 
         {/* Completed tasks summary */}
         <Text style={styles.summary}>
-          Tasks completed {completedTasks}/{taskList.length}
+          {activeProject && activeProject.taskStats?.total
+            ? 'Tasks completed ' +
+              activeProject.taskStats?.completed +
+              '/' +
+              activeProject.taskStats?.total
+            : null}
         </Text>
 
         {/* Button for adding a task */}
@@ -163,7 +125,7 @@ export default function TasksScreen({ route, navigation }) {
       <AddTaskModal
         visible={addModalVisible}
         onClose={() => setAddModalVisible(false)}
-        onSave={addTask}
+        onSave={handeAddTask}
       />
 
       {/* Modal for editing an existing task */}
@@ -173,8 +135,8 @@ export default function TasksScreen({ route, navigation }) {
           setEditModalVisible(false);
           setSelectedTask(null);
         }}
-        onSave={updateTask}
-        onDelete={deleteTask}
+        onSave={handleUpdateTask}
+        onDelete={handleDeleteTask}
         task={selectedTask}
       />
     </View>
