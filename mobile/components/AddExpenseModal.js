@@ -12,26 +12,34 @@ import {
 export default function AddExpenseModal({ visible, onClose, onSave }) {
   // Store the expense name entered by the user
   const [expenseName, setExpenseName] = useState('');
-  const [expenseAmount, setExpenseAmount] = useState(0);
+  const [expenseAmount, setExpenseAmount] = useState('');
 
   // Function for saving a new expense
   const saveExpense = () => {
-    // Check that the task name is not empty
+    // Check that the expense name is not empty
     if (expenseName.trim() === '') {
       Alert.alert('Error', 'Please enter a valid name for an expense.');
       return;
     }
 
-    const parsedExpenseAmount = parseInt(expenseAmount, 10) || null;
+    // Check that the expense amount is not empty
+    if (expenseAmount.trim() === '') {
+      Alert.alert('Error', 'Please enter an amount for expense.');
+      return;
+    }
 
-    // Check if expense is an integer and not negative
-    if (!parsedExpenseAmount || parsedExpenseAmount < 0) {
+    const parsedExpenseAmount = Number(expenseAmount.replace(',', '.'));
+
+    // Check if expense is a valid number
+    if (!Number.isFinite(parsedExpenseAmount) || parsedExpenseAmount < 0) {
       Alert.alert('Error', 'Please enter a valid expense amount.');
       return;
     }
 
+    const expenseInCents = Math.round(parsedExpenseAmount * 100);
+
     // Send the expense name to ExpensesScreen
-    onSave(expenseName.trim(), parsedExpenseAmount);
+    onSave(expenseName.trim(), expenseInCents);
 
     // Clear the input
     setExpenseName('');
@@ -75,8 +83,8 @@ export default function AddExpenseModal({ visible, onClose, onSave }) {
           {/* Input for the expense name */}
           <TextInput
             style={styles.input}
-            placeholder="0.00"
-            keyboardType="numeric"
+            placeholder="Enter expense (€)"
+            keyboardType="decimal-pad"
             value={expenseAmount}
             onChangeText={setExpenseAmount}
             maxLength={50}
