@@ -94,7 +94,6 @@ export function ActiveProjectProvider({ children }) {
   };
 
   const editExpense = async (expenseId, updatedFields) => {
-    console.log('ding');
     await updateExpenseInDb(expenseId, updatedFields);
   };
 
