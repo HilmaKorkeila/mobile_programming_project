@@ -30,9 +30,9 @@ export default function ExpensesScreen({ route, navigation }) {
     if (expense.id) {
       await editExpense(expense.id, expense);
     }
-    // Id not, create new
+    // If not, create new
     else {
-      await createExpense(expense.name, amount);
+      await createExpense(expense.name, expense.amount);
     }
 
     setSelectedExpense(null);

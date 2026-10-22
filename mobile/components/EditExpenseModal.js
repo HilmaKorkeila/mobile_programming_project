@@ -142,9 +142,11 @@ export default function EditExpenseModal({
           </Pressable>
 
           {/* Button for deleting the expense */}
-          <Pressable style={styles.deleteButton} onPress={deleteExpense}>
-            <Text style={styles.deleteButtonText}>Delete expense</Text>
-          </Pressable>
+          {expense?.id && (
+            <Pressable style={styles.deleteButton} onPress={deleteExpense}>
+              <Text style={styles.deleteButtonText}>Delete expense</Text>
+            </Pressable>
+          )}
 
           {/* Button for closing the modal */}
           <Pressable style={styles.cancelButton} onPress={closeModal}>
