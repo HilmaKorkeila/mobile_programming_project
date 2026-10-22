@@ -4,13 +4,10 @@ import { StyleSheet, Text, View, Pressable, FlatList } from 'react-native';
 import { useState } from 'react';
 
 // Components
-import AddExpenseModal from '../components/AddExpenseModal';
+import EditExpenseModal from '../components/EditExpenseModal';
 
 export default function ExpensesScreen({ route, navigation }) {
-  const { activeProject, createExpense } = useActiveProject();
-
-  // Controls the visibility of the add expense modal
-  const [addModalVisible, setAddModalVisible] = useState(false);
+  const { activeProject, createExpense, editExpense } = useActiveProject();
 
   // Controls the visibility of the edit expense modal
   const [editModalVisible, setEditModalVisible] = useState(false);
@@ -19,18 +16,27 @@ export default function ExpensesScreen({ route, navigation }) {
   const [selectedExpense, setSelectedExpense] = useState(null);
 
   // Function for opening the edit expense modal
-  const openEditModal = (expense) => {
+  const openEditModal = (expense = null) => {
     setSelectedExpense(expense);
     setEditModalVisible(true);
   };
 
   // Function for adding a new expense
-  const handleAddExpense = async (name, amount) => {
-    // Save the new expense to SQLite
-    await createExpense(name, amount);
+  const handleEditExpense = async (expense) => {
+    if (!expense) return;
 
-    // Close the add expense modal
-    setAddModalVisible(false);
+    // if expense contains id field, update existing
+    if (expense.id) {
+      await editExpense(expense.id, expense);
+    }
+    // Id not, create new
+    else {
+      await createExpense(expense.name, amount);
+    }
+
+    setSelectedExpense(null);
+    // Close the edit expense modal
+    setEditModalVisible(false);
   };
 
   const centsToEuros = (amount) => {
@@ -79,10 +85,7 @@ export default function ExpensesScreen({ route, navigation }) {
       </View>
 
       {/* Button for adding an expense */}
-      <Pressable
-        style={styles.addButton}
-        onPress={() => setAddModalVisible(true)}
-      >
+      <Pressable style={styles.addButton} onPress={() => openEditModal()}>
         <Text style={[styles.buttonText, styles.addButtonText]}>
           Add expense
         </Text>
@@ -98,11 +101,15 @@ export default function ExpensesScreen({ route, navigation }) {
         </Text>
       </Pressable>
 
-      {/* Modal for adding a new expense */}
-      <AddExpenseModal
-        visible={addModalVisible}
-        onClose={() => setAddModalVisible(false)}
-        onSave={handleAddExpense}
+      {/* Modal for adding/editing an expense */}
+      <EditExpenseModal
+        visible={editModalVisible}
+        onClose={() => {
+          setEditModalVisible(false);
+          setSelectedExpense(null);
+        }}
+        onSave={handleEditExpense}
+        expense={selectedExpense}
       />
     </View>
   );

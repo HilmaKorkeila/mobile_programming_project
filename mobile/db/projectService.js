@@ -55,14 +55,15 @@ export async function insertExpenseToDb(projectId, name, amount) {
 
 // ...() is called a conditional spread pattern
 export async function updateExpenseInDb(expenseId, updatedFields) {
-  await db.update(expenses).set({
-    ...(updatedFields.name && { name: updatedFields.name }),
-    ...(
-      updatedFields.amount !== undefined && {
+  await db
+    .update(expenses)
+    .set({
+      ...(updatedFields.name && { name: updatedFields.name }),
+      ...(updatedFields.amount !== undefined && {
         amount: parseInt(updatedFields.amount, 10),
-      }
-    ).where(eq(expenses.id, expenseId)),
-  });
+      }),
+    })
+    .where(eq(expenses.id, expenseId));
 }
 
 export async function deleteExpenseFromDb(expenseId) {

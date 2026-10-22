@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -9,10 +9,26 @@ import {
   Alert,
 } from 'react-native';
 
-export default function AddExpenseModal({ visible, onClose, onSave }) {
+export default function EditExpenseModal({
+  visible,
+  onClose,
+  onSave,
+  expense,
+}) {
   // Store the expense name entered by the user
   const [expenseName, setExpenseName] = useState('');
   const [expenseAmount, setExpenseAmount] = useState('');
+
+  // Populate expense name and amount if expense object was passed (editing)
+  useEffect(() => {
+    if (visible && expense) {
+      setExpenseName(expense.name);
+      setExpenseAmount((expense.amount / 100).toString());
+    } else {
+      setExpenseName('');
+      setExpenseAmount('');
+    }
+  }, [expense, visible]);
 
   // Function for saving a new expense
   const saveExpense = () => {
@@ -38,18 +54,25 @@ export default function AddExpenseModal({ visible, onClose, onSave }) {
 
     const expenseInCents = Math.round(parsedExpenseAmount * 100);
 
+    // Create a new expense object. add id field, if passed expense contains id field
+    const newExpense = {
+      name: expenseName.trim(),
+      amount: expenseInCents,
+      ...(expense?.id && { id: expense.id }),
+    };
+
     // Send the expense name to ExpensesScreen
-    onSave(expenseName.trim(), expenseInCents);
+    onSave(newExpense);
 
     // Clear the input
     setExpenseName('');
-    setExpenseAmount(0);
+    setExpenseAmount('');
   };
 
   // Function for closing the modal
   const closeModal = () => {
     setExpenseName('');
-    setExpenseAmount(0);
+    setExpenseAmount('');
     onClose();
   };
 
@@ -63,7 +86,9 @@ export default function AddExpenseModal({ visible, onClose, onSave }) {
       <View style={styles.overlay}>
         <View style={styles.modalContainer}>
           {/* Modal title */}
-          <Text style={styles.title}>Add Expense</Text>
+          <Text style={styles.title}>
+            {expense?.id ? 'Edit' : 'Add'} expense
+          </Text>
 
           {/* Expense name label */}
           <Text style={styles.label}>Expense name</Text>
