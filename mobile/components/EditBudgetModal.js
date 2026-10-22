@@ -19,7 +19,7 @@ export default function EditBudgetModal({
   const [budget, setBudget] = useState('');
 
   const centsToEuros = (amount) => {
-    return (amount / 100).toFixed(2) + ' €';
+    return ((amount ?? 0) / 100).toFixed(2) + ' €';
   };
 
   // Function for saving the budget
@@ -31,16 +31,19 @@ export default function EditBudgetModal({
     }
 
     // Convert the input to a number
-    const newBudget = Number(budget);
+    const newBudget = Number(budget.replace(',', '.'));
 
     // Check that the budget is a valid number
-    if (!Number.isInteger(newBudget) || newBudget < 0) {
+    if (!Number.isFinite(newBudget) || newBudget < 0) {
       Alert.alert('Error', 'Please enter a valid budget.');
       return;
     }
 
+    // Convert euros to cents
+    const budgetInCents = Math.round(newBudget * 100);
+
     // Send the new budget to BudgetScreen
-    onSave(newBudget);
+    onSave(budgetInCents);
 
     // Clear the input
     setBudget('');
@@ -73,7 +76,7 @@ export default function EditBudgetModal({
           <TextInput
             style={styles.input}
             placeholder="Enter new budget"
-            keyboardType="numeric"
+            keyboardType="decimal-pad"
             value={budget}
             onChangeText={setBudget}
           />
