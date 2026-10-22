@@ -7,7 +7,8 @@ import { useState } from 'react';
 import EditExpenseModal from '../components/EditExpenseModal';
 
 export default function ExpensesScreen({ route, navigation }) {
-  const { activeProject, createExpense, editExpense } = useActiveProject();
+  const { activeProject, createExpense, editExpense, deleteExpense } =
+    useActiveProject();
 
   // Controls the visibility of the edit expense modal
   const [editModalVisible, setEditModalVisible] = useState(false);
@@ -41,6 +42,16 @@ export default function ExpensesScreen({ route, navigation }) {
 
   const centsToEuros = (amount) => {
     return (amount / 100).toFixed(2) + ' €';
+  };
+
+  // Function for deleting an expense
+  const handleDeleteTask = async () => {
+    // Delete the selected expense from SQLite
+    await deleteExpense(selectedExpense.id);
+
+    // Close the edit expense modal
+    setEditModalVisible(false);
+    setSelectedExpense(null);
   };
 
   return (
@@ -109,6 +120,7 @@ export default function ExpensesScreen({ route, navigation }) {
           setSelectedExpense(null);
         }}
         onSave={handleEditExpense}
+        onDelete={handleDeleteTask}
         expense={selectedExpense}
       />
     </View>

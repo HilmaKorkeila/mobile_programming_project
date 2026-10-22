@@ -14,6 +14,7 @@ export default function EditExpenseModal({
   onClose,
   onSave,
   expense,
+  onDelete,
 }) {
   // Store the expense name entered by the user
   const [expenseName, setExpenseName] = useState('');
@@ -76,6 +77,26 @@ export default function EditExpenseModal({
     onClose();
   };
 
+  // Function for deleting the expense
+  const deleteExpense = () => {
+    // Ask for confirmation before deleting
+    Alert.alert(
+      'Delete expense',
+      'Are you sure you want to delete this expense?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: onDelete,
+        },
+      ],
+    );
+  };
+
   return (
     <Modal
       visible={visible}
@@ -118,6 +139,11 @@ export default function EditExpenseModal({
           {/* Button for saving the expense */}
           <Pressable style={styles.saveButton} onPress={saveExpense}>
             <Text style={styles.saveButtonText}>Save expense</Text>
+          </Pressable>
+
+          {/* Button for deleting the expense */}
+          <Pressable style={styles.deleteButton} onPress={deleteExpense}>
+            <Text style={styles.deleteButtonText}>Delete expense</Text>
           </Pressable>
 
           {/* Button for closing the modal */}
@@ -185,6 +211,24 @@ const styles = StyleSheet.create({
   // Save button text
   saveButtonText: {
     color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '500',
+  },
+
+  // Delete expense button
+  deleteButton: {
+    backgroundColor: '#F5EAE7',
+    borderColor: '#A65F58',
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 14,
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+
+  // Delete button text
+  deleteButtonText: {
+    color: '#A65F58',
     fontSize: 14,
     fontWeight: '500',
   },
