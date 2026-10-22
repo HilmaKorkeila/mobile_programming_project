@@ -27,55 +27,46 @@ export default function BudgetScreen({ route, navigation }) {
 
   return (
     <View style={styles.container}>
-      {/* Small heading above the budget card */}
-      <Text style={styles.screenTitle}>Budget</Text>
+      {/* Small heading above the main title */}
+      <Text style={styles.smallTitle}>BUDGET</Text>
 
-      {/* Main budget card */}
-      <View style={styles.card}>
-        {/* Card title */}
-        <Text style={styles.cardTitle}>BUDGET</Text>
+      {/* Main title of the screen */}
+      <Text style={styles.title}>{activeProject?.name}</Text>
 
-        {/* Project name */}
-        <Text style={styles.projectName}>{activeProject?.name}</Text>
-
-        {/* Total budget */}
-        <Text style={styles.label}>Total budget</Text>
-        <View style={styles.amountBox}>
-          <Text style={styles.amountText}>
-            {centsToEuros(activeProject?.budget)}
-          </Text>
-        </View>
-
-        {/* Total expenses */}
-        <Text style={styles.label}>Spent</Text>
-        <View style={styles.amountBox}>
-          <Text style={styles.amountText}>
-            {centsToEuros(activeProject?.totalExpenses)}
-          </Text>
-        </View>
-
-        {/* Remaining budget */}
-        <Text style={styles.label}>Remaining</Text>
-        <View style={styles.amountBox}>
-          <Text style={styles.amountText}>{centsToEuros(remaining)}</Text>
-        </View>
-
-        {/* Button for editing the budget */}
-        <Pressable
-          style={styles.editButton}
-          onPress={() => setModalVisible(true)}
-        >
-          <Text style={styles.editButtonText}>Edit budget</Text>
-        </Pressable>
-
-        {/* Button for returning to Dashboard */}
-        <Pressable
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.backButtonText}>Back to Dashboard</Text>
-        </Pressable>
+      {/* Total budget */}
+      <Text style={styles.label}>Total budget</Text>
+      <View style={styles.amountBox}>
+        <Text style={styles.amountText}>
+          {centsToEuros(activeProject?.budget)}
+        </Text>
       </View>
+
+      {/* Total expenses */}
+      <Text style={styles.label}>Spent</Text>
+      <View style={styles.amountBox}>
+        <Text style={styles.amountText}>
+          {centsToEuros(activeProject?.totalExpenses)}
+        </Text>
+      </View>
+
+      {/* Remaining budget */}
+      <Text style={styles.label}>Remaining</Text>
+      <View style={styles.amountBox}>
+        <Text style={styles.amountText}>{centsToEuros(remaining)}</Text>
+      </View>
+
+      {/* Button for editing the budget */}
+      <Pressable
+        style={styles.editButton}
+        onPress={() => setModalVisible(true)}
+      >
+        <Text style={styles.editButtonText}>Edit budget</Text>
+      </Pressable>
+
+      {/* Button for returning to Dashboard */}
+      <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Text style={styles.backButtonText}>Back to Dashboard</Text>
+      </Pressable>
 
       {/* Modal for editing the project budget */}
       <EditBudgetModal
@@ -98,27 +89,20 @@ const styles = StyleSheet.create({
     paddingTop: 50,
   },
 
-  // Small heading above the card
-  screenTitle: {
+  // Main screen title
+  title: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#242B28',
+    marginBottom: 24,
+  },
+
+  // Small heading above the main title
+  smallTitle: {
     fontSize: 12,
     fontWeight: '400',
     color: '#242B28',
-    marginBottom: 12,
-  },
-
-  // Main budget card
-  card: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    padding: 24,
-  },
-
-  // Budget card title
-  cardTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#242B28',
-    marginBottom: 28,
+    marginBottom: 8,
   },
 
   // Project name
