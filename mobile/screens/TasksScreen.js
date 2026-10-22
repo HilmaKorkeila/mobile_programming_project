@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Pressable, FlatList } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
 import { useActiveProject } from '../db/ActiveProjectContext';
+import { globalStyles as gs } from '../styles/globalStyles';
 
 // Import components
 import AddTaskModal from '../components/AddTaskModal';
@@ -28,7 +29,7 @@ export default function TasksScreen({ navigation }) {
   };
 
   // Function for adding a new task
-  const handeAddTask = async (taskName) => {
+  const handleAddTask = async (taskName) => {
     // Save the new task to SQLite
     await createTask(taskName);
 
@@ -58,21 +59,17 @@ export default function TasksScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      {/* Small heading above the tasks card */}
-      <Text style={styles.screenTitle}>Tasks</Text>
+      {/* Small heading above the main title */}
+      <Text style={styles.smallTitle}>TASKS</Text>
 
-      {/* Main tasks card */}
-      <View style={styles.card}>
-        {/* Card title */}
-        <Text style={styles.cardTitle}>TASKS</Text>
+      {/* Main title of the screen */}
+      <Text style={styles.title}>{activeProject?.name}</Text>
 
-        {/* Project name */}
-        <Text style={styles.projectName}>{activeProject?.name}</Text>
+      {/* Tasks list title */}
+      <Text style={styles.label}>Tasks list</Text>
 
-        {/* Tasks list title */}
-        <Text style={styles.label}>Tasks list</Text>
-
-        {/* Tasks list */}
+      {/* Tasks list */}
+      <View style={styles.listContainer}>
         <FlatList
           style={styles.taskList}
           data={activeProject?.tasks ?? []}
@@ -93,39 +90,41 @@ export default function TasksScreen({ navigation }) {
             </Pressable>
           )}
         />
-
-        {/* Completed tasks summary */}
-        <Text style={styles.summary}>
-          {activeProject && activeProject.taskStats?.total
-            ? 'Tasks completed ' +
-              activeProject.taskStats?.completed +
-              '/' +
-              activeProject.taskStats?.total
-            : null}
-        </Text>
-
-        {/* Button for adding a task */}
-        <Pressable
-          style={styles.addButton}
-          onPress={() => setAddModalVisible(true)}
-        >
-          <Text style={styles.addButtonText}>Add task</Text>
-        </Pressable>
-
-        {/* Button for returning to Dashboard */}
-        <Pressable
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.backButtonText}>Back to Dashboard</Text>
-        </Pressable>
       </View>
+
+      {/* Completed tasks summary */}
+      <Text style={styles.summary}>
+        {activeProject && activeProject.taskStats?.total
+          ? 'Tasks completed ' +
+            activeProject.taskStats?.completed +
+            '/' +
+            activeProject.taskStats?.total
+          : null}
+      </Text>
+
+      {/* Button for adding a task */}
+      <Pressable
+        style={styles.addButton}
+        onPress={() => setAddModalVisible(true)}
+      >
+        <Text style={styles.addButtonText}>Add task</Text>
+      </Pressable>
+
+      {/* Button for returning to Dashboard */}
+      <Pressable
+        style={[gs.button, gs.buttonSecondary, styles.backButton]}
+        onPress={() => navigation.goBack()}
+      >
+        <Text style={[gs.buttonText, gs.buttonTextSecondary]}>
+          Back to Dashboard
+        </Text>
+      </Pressable>
 
       {/* Modal for adding a new task */}
       <AddTaskModal
         visible={addModalVisible}
         onClose={() => setAddModalVisible(false)}
-        onSave={handeAddTask}
+        onSave={handleAddTask}
       />
 
       {/* Modal for editing an existing task */}
@@ -153,19 +152,26 @@ const styles = StyleSheet.create({
     paddingTop: 50,
   },
 
-  // Small heading above the card
-  screenTitle: {
+  listContainer: {
+    flex: 1,
+    backgroundColor: '#EBE9E5',
+    borderRadius: 6,
+  },
+
+  // Main screen title
+  title: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#242B28',
+    marginBottom: 24,
+  },
+
+  // Small heading above the main title
+  smallTitle: {
     fontSize: 12,
     fontWeight: '400',
     color: '#242B28',
-    marginBottom: 12,
-  },
-
-  // Main tasks card
-  card: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    padding: 24,
+    marginBottom: 8,
   },
 
   // Tasks card title
@@ -194,10 +200,7 @@ const styles = StyleSheet.create({
 
   // Tasks list background
   taskList: {
-    backgroundColor: '#EBE9E5',
-    borderRadius: 6,
-    height: 180,
-    padding: 10,
+    flex: 1,
   },
 
   // Single task row
@@ -206,19 +209,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingVertical: 10,
+    paddingHorizontal: 20,
     gap: 10,
   },
 
   // Task name
   taskText: {
-    fontSize: 14,
+    fontSize: 16,
     color: '#242B28',
     flex: 1,
   },
 
   // Current task status
   taskStatus: {
-    fontSize: 12,
+    fontSize: 14,
     color: '#285943',
   },
 
@@ -246,20 +250,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 
-  // Back to Dashboard button
   backButton: {
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#D8DDD7',
-    borderRadius: 6,
-    padding: 12,
-    alignItems: 'center',
-  },
-
-  // Back to Dashboard button text
-  backButtonText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#242B28',
+    marginBottom: 20,
   },
 });

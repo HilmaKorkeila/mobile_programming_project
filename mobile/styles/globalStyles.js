@@ -5,8 +5,8 @@ export const globalStyles = StyleSheet.create({
   // Buttons
   button: {
     borderWidth: 1,
-    borderRadius: 10,
-    padding: 14,
+    borderRadius: 6,
+    padding: 12,
     marginBottom: 10,
     alignItems: 'center',
   },
@@ -15,8 +15,9 @@ export const globalStyles = StyleSheet.create({
     borderColor: colors.primary,
   },
   buttonSecondary: {
-    backgroundColor: colors.background,
-    borderColor: colors.primary,
+    backgroundColor: colors.blank,
+    borderColor: colors.cardProjectBorder,
+    borderWidth: 1,
   },
   buttonDanger: {
     backgroundColor: colors.dangerBackground,
@@ -25,6 +26,9 @@ export const globalStyles = StyleSheet.create({
   buttonText: {
     fontWeight: typography.weights.medium,
     fontSize: typography.sizes.body,
+  },
+  buttonTextSecondary: {
+    color: colors.textMain,
   },
   list: {
     backgroundColor: colors.listBackground,

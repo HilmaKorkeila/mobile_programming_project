@@ -2,7 +2,7 @@ export const colors = {
   background: '#FAF8F5',
   primary: '#285943', // Painikkeet ja Dashboardin kortit
   budgetSummary: '#D4E0D6', // Budgetin summat ja Expenses-yhteenveto
-  cardProject: '#FFFFFF', // Projects-näkymän kortit
+  blank: '#FFFFFF', // Projects-näkymän kortit
   cardProjectBorder: '#D8DDD7', // Projects-näkymän reunat
   listBackground: '#EBE9E5', // Project overview, Expenses- ja Tasks-listat
   textMain: '#242B28', // Otsikot ja päätekstit
