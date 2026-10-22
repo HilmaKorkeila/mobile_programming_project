@@ -42,9 +42,6 @@ export default function ProjectsScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      {/* Small heading above the main title */}
-      <Text style={styles.smallTitle}>PROJECTS</Text>
-
       {/* Main title of the screen */}
       <Text style={styles.title}>My projects</Text>
 

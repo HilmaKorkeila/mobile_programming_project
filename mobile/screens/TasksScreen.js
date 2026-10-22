@@ -60,10 +60,10 @@ export default function TasksScreen({ navigation }) {
   return (
     <View style={styles.container}>
       {/* Small heading above the main title */}
-      <Text style={styles.smallTitle}>TASKS</Text>
+      <Text style={styles.smallTitle}>{activeProject?.name}</Text>
 
       {/* Main title of the screen */}
-      <Text style={styles.title}>{activeProject?.name}</Text>
+      <Text style={styles.title}>Tasks</Text>
 
       {/* Tasks list title */}
       <Text style={styles.label}>Tasks list</Text>
