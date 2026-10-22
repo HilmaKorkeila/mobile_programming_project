@@ -5,6 +5,7 @@ import {
   insertExpenseToDb,
   updateExpenseInDb,
   deleteExpenseFromDb,
+  updateProjectInDb,
 } from './projectService';
 import { db } from './index';
 import { projects, tasks, expenses } from './schema';
@@ -74,6 +75,11 @@ export function ActiveProjectProvider({ children }) {
     setActiveProjectId(id);
   };
 
+  const editProject = async (projectId, updatedFields) => {
+    if (!activeProjectId) return;
+    await updateProjectInDb(projectId, updatedFields);
+  };
+
   const deleteProject = async (projectId) => {
     if (!activeProjectId) return;
     await deleteProjectFromDb(projectId);
@@ -97,6 +103,7 @@ export function ActiveProjectProvider({ children }) {
       value={{
         activeProject,
         selectProject,
+        editProject,
         deleteProject,
         createExpense,
         editExpense,

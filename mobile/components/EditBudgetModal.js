@@ -18,6 +18,10 @@ export default function EditBudgetModal({
   // State for the budget input
   const [budget, setBudget] = useState('');
 
+  const centsToEuros = (amount) => {
+    return (amount / 100).toFixed(2) + ' €';
+  };
+
   // Function for saving the budget
   const saveBudget = () => {
     // Check that the input is not empty
@@ -61,7 +65,9 @@ export default function EditBudgetModal({
           <Text style={styles.title}>Edit budget</Text>
 
           {/* Show the current budget */}
-          <Text style={styles.label}>Current budget: {currentBudget} €</Text>
+          <Text style={styles.label}>
+            Current budget: {centsToEuros(currentBudget)}
+          </Text>
 
           {/* Input for the new budget */}
           <TextInput

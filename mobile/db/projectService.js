@@ -30,6 +30,19 @@ export async function deleteProjectFromDb(projectId) {
   await db.delete(projects).where(eq(projects.id, projectId));
 }
 
+// ...() is called a conditional spread pattern
+// budget field updates to 0 or given value, whichever is greater to prevent negative values
+export async function updateProjectInDb(projectId, updatedFields) {
+  await db
+    .update(projects)
+    .set({
+      ...(updatedFields.budget !== undefined && {
+        budget: Math.max(parseInt(updatedFields.budget, 10), 0),
+      }),
+    })
+    .where(eq(projects.id, projectId));
+}
+
 export async function insertExpenseToDb(projectId, name, amount) {
   await db.insert(expenses).values({
     id: Crypto.randomUUID(),

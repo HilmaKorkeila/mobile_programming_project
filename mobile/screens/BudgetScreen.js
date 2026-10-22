@@ -1,59 +1,26 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { useLiveQuery } from 'drizzle-orm/expo-sqlite';
-import { eq } from 'drizzle-orm';
-
-// Import database connection and tables
-import { db } from '../db';
-import { projects, expenses } from '../db/schema';
+import { useActiveProject } from '../db/ActiveProjectContext';
 
 // Import component
 import EditBudgetModal from '../components/EditBudgetModal';
 
 export default function BudgetScreen({ route, navigation }) {
-  // Get the selected project ID
-  const { projectId } = route.params;
+  const { activeProject, editProject } = useActiveProject();
+
+  const centsToEuros = (amount) => {
+    return (amount / 100).toFixed(2) + ' €';
+  };
 
   // Controls the visibility of the budget modal
   const [modalVisible, setModalVisible] = useState(false);
 
-  // Get the selected project from SQLite
-  const { data: projectList = [] } = useLiveQuery(
-    db.select().from(projects).where(eq(projects.id, projectId)),
-  );
-
-  // Get the selected project's expenses from SQLite
-  const { data: expenseList = [] } = useLiveQuery(
-    db.select().from(expenses).where(eq(expenses.projectId, projectId)),
-  );
-
-  // Get project information
-  let projectName = '';
-  let totalBudget = 0;
-
-  if (projectList.length > 0) {
-    projectName = projectList[0].name;
-    totalBudget = projectList[0].budget;
-  }
-
-  // Calculate total expenses
-  let spent = 0;
-
-  for (let expense of expenseList) {
-    spent = spent + expense.amount;
-  }
-
   // Calculate remaining budget
-  const remaining = totalBudget - spent;
+  const remaining = activeProject?.budget - activeProject?.totalExpenses;
 
   // Function for updating the project budget
-  const updateBudget = async (newBudget) => {
-    // Save the new budget to SQLite
-    await db
-      .update(projects)
-      .set({ budget: newBudget })
-      .where(eq(projects.id, projectId));
-
+  const handleUpdateBudget = async (budget) => {
+    await editProject(activeProject?.id, { budget });
     // Close the modal after saving
     setModalVisible(false);
   };
@@ -69,24 +36,28 @@ export default function BudgetScreen({ route, navigation }) {
         <Text style={styles.cardTitle}>BUDGET</Text>
 
         {/* Project name */}
-        <Text style={styles.projectName}>{projectName}</Text>
+        <Text style={styles.projectName}>{activeProject?.name}</Text>
 
         {/* Total budget */}
         <Text style={styles.label}>Total budget</Text>
         <View style={styles.amountBox}>
-          <Text style={styles.amountText}>{totalBudget} €</Text>
+          <Text style={styles.amountText}>
+            {centsToEuros(activeProject?.budget)}
+          </Text>
         </View>
 
         {/* Total expenses */}
         <Text style={styles.label}>Spent</Text>
         <View style={styles.amountBox}>
-          <Text style={styles.amountText}>{spent} €</Text>
+          <Text style={styles.amountText}>
+            {centsToEuros(activeProject?.totalExpenses)}
+          </Text>
         </View>
 
         {/* Remaining budget */}
         <Text style={styles.label}>Remaining</Text>
         <View style={styles.amountBox}>
-          <Text style={styles.amountText}>{remaining} €</Text>
+          <Text style={styles.amountText}>{centsToEuros(remaining)}</Text>
         </View>
 
         {/* Button for editing the budget */}
@@ -110,8 +81,8 @@ export default function BudgetScreen({ route, navigation }) {
       <EditBudgetModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
-        onSave={updateBudget}
-        currentBudget={totalBudget}
+        onSave={handleUpdateBudget}
+        currentBudget={activeProject?.budget}
       />
     </View>
   );
