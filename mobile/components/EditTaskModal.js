@@ -77,6 +77,9 @@ export default function EditTaskModal({
           {/* Modal title */}
           <Text style={styles.title}>Edit task</Text>
 
+          {/* Task status label */}
+          <Text style={styles.label}>Task name</Text>
+
           {/* Input for editing the task name */}
           <TextInput
             style={styles.input}
