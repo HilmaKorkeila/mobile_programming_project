@@ -2,7 +2,7 @@ import { db } from './index';
 import { eq, ne, inArray } from 'drizzle-orm';
 import { projects, tasks, expenses, dirtyProjects } from './schema';
 
-const API_BASE_URL = 'http://192.168.0.15:1337';
+const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL;
 let isSyncing = false;
 
 export async function syncPendingProjects() {
