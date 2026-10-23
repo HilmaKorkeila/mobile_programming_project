@@ -3,10 +3,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 
-// Models
-import { Project } from './models/Project.js';
-
-const port = process.env.PORT || 3000;
+import syncRoutes from './routes/syncRoutes.js';
 
 // Express app with cors and json enabled
 const app = express();
@@ -21,6 +18,10 @@ mongoose
     console.error('MongoDB connection error:', error);
   });
 
+// Routes
+app.use('/sync', syncRoutes);
+
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
