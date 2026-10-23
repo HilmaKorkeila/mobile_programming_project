@@ -9,7 +9,19 @@ export const projects = sqliteTable('projects', {
   is_favourite: integer('is_favourite', { mode: 'boolean' })
     .default(false)
     .notNull(),
-  createdAt: integer('created_at').notNull(),
+  createdAt: integer('created_at')
+    .notNull()
+    .$defaultFn(() => new Date()), // Sets createdAt to Date.now() on creation
+});
+
+// Projects pending cloud sync
+export const dirtyProjects = sqliteTable('dirty_projects', {
+  projectId: text('projects_id').primaryKey(),
+  action: text('action').notNull().default('upsert'), // 'upsert' | 'delete'
+  updatedAt: integer('updated_at')
+    .notNull()
+    .$defaultFn(() => new Date())
+    .$onUpdate(() => new Date()),
 });
 
 // Expenses. If parent project is deleted, expense is automatically deleted
