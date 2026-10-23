@@ -8,6 +8,8 @@ import {
 
 import { useActiveProject } from '../db/ActiveProjectContext';
 
+import { globalStyles as gs } from '../styles/globalStyles';
+
 // Import database connection and projects table
 import { db } from '../db';
 import { projects } from '../db/schema';
@@ -46,7 +48,7 @@ export default function ProjectsScreen({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={gs.mainContainer}>
       {/* Main title of the screen */}
       <Text style={styles.title}>My projects</Text>
 
@@ -88,14 +90,6 @@ export default function ProjectsScreen({ navigation }) {
 
 // Styles for ProjectsScreen
 const styles = StyleSheet.create({
-  // Main screen container
-  container: {
-    flex: 1,
-    backgroundColor: '#FAF8F5',
-    paddingHorizontal: 20,
-    paddingTop: 50,
-  },
-
   // Main screen title
   title: {
     fontSize: 24,
@@ -127,7 +121,6 @@ const styles = StyleSheet.create({
     padding: 14,
     alignItems: 'center',
     marginTop: 12,
-    marginBottom: 20,
   },
 
   // Text inside the add project button

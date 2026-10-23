@@ -1,3 +1,5 @@
+// Data for theme. globalStyles.js uses these values
+
 export const colors = {
   background: '#FAF8F5',
   primary: '#285943', // Painikkeet ja Dashboardin kortit

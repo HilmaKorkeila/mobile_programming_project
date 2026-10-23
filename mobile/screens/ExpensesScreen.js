@@ -55,7 +55,7 @@ export default function ExpensesScreen({ route, navigation }) {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={gs.mainContainer}>
       {/* Small heading above the main title */}
       <Text style={styles.smallTitle}>{activeProject?.name}</Text>
 
@@ -64,8 +64,8 @@ export default function ExpensesScreen({ route, navigation }) {
 
       {/* Total expenses */}
       <Text style={styles.label}>Total expenses</Text>
-      <View style={styles.amountBox}>
-        <Text style={styles.amountText}>
+      <View style={gs.importantValuesContainer}>
+        <Text style={gs.importanValues}>
           {centsToEuros(activeProject?.totalExpenses)}
         </Text>
       </View>
@@ -104,7 +104,7 @@ export default function ExpensesScreen({ route, navigation }) {
 
       {/* Button for returning to Dashboard */}
       <Pressable
-        style={[gs.button, gs.buttonSecondary, styles.backButton]}
+        style={[gs.button, gs.buttonSecondary]}
         onPress={() => navigation.goBack()}
       >
         <Text style={[gs.buttonText, gs.buttonTextSecondary]}>
@@ -128,14 +128,6 @@ export default function ExpensesScreen({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
-  // Main screen container
-  container: {
-    flex: 1,
-    backgroundColor: '#FAF8F5',
-    paddingHorizontal: 20,
-    paddingTop: 50,
-  },
-
   // Expenses list container
   listContainer: {
     flex: 1,
@@ -169,20 +161,6 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: '#242B28',
     marginBottom: 8,
-  },
-
-  amountBox: {
-    backgroundColor: '#D4E0D6',
-    borderRadius: 6,
-    padding: 10,
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-
-  expenseAmount: {
-    fontSize: 14,
-    fontWeight: '400',
-    color: '#242B28',
   },
 
   // Single expense row
@@ -222,9 +200,5 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 14,
     fontWeight: '500',
-  },
-
-  backButton: {
-    marginBottom: 20,
   },
 });

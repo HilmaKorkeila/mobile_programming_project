@@ -43,7 +43,7 @@ export default function DashboardScreen({ route, navigation }) {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={gs.mainContainer}>
       {/* Small heading above the main title */}
       <Text style={styles.smallTitle}>{activeProject?.name}</Text>
       {/* Main title of the screen */}
@@ -105,14 +105,6 @@ export default function DashboardScreen({ route, navigation }) {
 
 // Styles for DashboardScreen
 const styles = StyleSheet.create({
-  // Main screen container
-  container: {
-    flex: 1,
-    backgroundColor: '#FAF8F5',
-    paddingHorizontal: 20,
-    paddingTop: 50,
-  },
-
   // Main screen title
   title: {
     fontSize: 24,

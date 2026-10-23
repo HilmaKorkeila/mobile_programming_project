@@ -58,7 +58,7 @@ export default function TasksScreen({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={gs.mainContainer}>
       {/* Small heading above the main title */}
       <Text style={styles.smallTitle}>{activeProject?.name}</Text>
 
@@ -112,7 +112,7 @@ export default function TasksScreen({ navigation }) {
 
       {/* Button for returning to Dashboard */}
       <Pressable
-        style={[gs.button, gs.buttonSecondary, styles.backButton]}
+        style={[gs.button, gs.buttonSecondary]}
         onPress={() => navigation.goBack()}
       >
         <Text style={[gs.buttonText, gs.buttonTextSecondary]}>
@@ -144,14 +144,6 @@ export default function TasksScreen({ navigation }) {
 
 // Styles for TasksScreen
 const styles = StyleSheet.create({
-  // Main screen container
-  container: {
-    flex: 1,
-    backgroundColor: '#FAF8F5',
-    paddingHorizontal: 20,
-    paddingTop: 50,
-  },
-
   listContainer: {
     flex: 1,
     backgroundColor: '#EBE9E5',
@@ -248,9 +240,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
     color: '#FFFFFF',
-  },
-
-  backButton: {
-    marginBottom: 20,
   },
 });

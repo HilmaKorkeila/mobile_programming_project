@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { useActiveProject } from '../db/ActiveProjectContext';
+import { globalStyles as gs } from '../styles/globalStyles';
 
 // Import component
 import EditBudgetModal from '../components/EditBudgetModal';
@@ -26,7 +27,7 @@ export default function BudgetScreen({ route, navigation }) {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={gs.mainContainer}>
       {/* Small heading above the main title */}
       <Text style={styles.smallTitle}>{activeProject?.name}</Text>
 
@@ -35,24 +36,24 @@ export default function BudgetScreen({ route, navigation }) {
 
       {/* Total budget */}
       <Text style={styles.label}>Total budget</Text>
-      <View style={styles.amountBox}>
-        <Text style={styles.amountText}>
+      <View style={gs.importantValuesContainer}>
+        <Text style={gs.importanValues}>
           {centsToEuros(activeProject?.budget)}
         </Text>
       </View>
 
       {/* Total expenses */}
       <Text style={styles.label}>Spent</Text>
-      <View style={styles.amountBox}>
-        <Text style={styles.amountText}>
+      <View style={gs.importantValuesContainer}>
+        <Text style={gs.importanValues}>
           {centsToEuros(activeProject?.totalExpenses)}
         </Text>
       </View>
 
       {/* Remaining budget */}
       <Text style={styles.label}>Remaining</Text>
-      <View style={styles.amountBox}>
-        <Text style={styles.amountText}>{centsToEuros(remaining)}</Text>
+      <View style={gs.importantValuesContainer}>
+        <Text style={gs.importanValues}>{centsToEuros(remaining)}</Text>
       </View>
 
       {/* Button for editing the budget */}
@@ -81,14 +82,6 @@ export default function BudgetScreen({ route, navigation }) {
 
 // Styles for BudgetScreen
 const styles = StyleSheet.create({
-  // Main screen container
-  container: {
-    flex: 1,
-    backgroundColor: '#FAF8F5',
-    paddingHorizontal: 20,
-    paddingTop: 50,
-  },
-
   // Main screen title
   title: {
     fontSize: 24,
@@ -119,22 +112,6 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: '#242B28',
     marginBottom: 8,
-  },
-
-  // Background for budget amounts
-  amountBox: {
-    backgroundColor: '#D4E0D6',
-    borderRadius: 6,
-    padding: 10,
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-
-  // Budget amount text
-  amountText: {
-    fontSize: 14,
-    fontWeight: '400',
-    color: '#242B28',
   },
 
   // Edit budget button
