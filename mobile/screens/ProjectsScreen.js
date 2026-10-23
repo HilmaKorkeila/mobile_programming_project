@@ -26,6 +26,11 @@ export default function ProjectsScreen({ navigation }) {
   // useLiveQuery updates the project list when database data changes
   const { data: projectList = [] } = useLiveQuery(db.select().from(projects));
 
+  // Sort projects alphabetically by name (A-Z)
+  const sortedProjects = [...projectList].sort((a, b) =>
+    a.name.localeCompare(b.name),
+  );
+
   // Function for changing the favorite status of a project
   const handleToggleFavorite = async (id) => {
     await toggleProjectFavouriteInDb(id);
@@ -48,7 +53,7 @@ export default function ProjectsScreen({ navigation }) {
       {/* Display all projects from the local SQLite database */}
       {/* Each project is displayed using the ProjectCard component */}
       <FlatList
-        data={projectList}
+        data={sortedProjects}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <ProjectCard
