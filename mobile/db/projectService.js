@@ -13,17 +13,11 @@ async function markProjectsDirty(projectRows) {
     return;
   }
 
-  console.log('=== PROJECT ROWS ===');
-  console.log(projectRows);
-
   // Select only 'projectId' and 'action' fields from rows. if no 'action' field exists, add one with default value of 'upsert'
   const cleanProjectRows = projectRows.map(({ projectId, action }) => ({
     projectId,
     action: action ?? 'upsert',
   }));
-
-  console.log('=== CLEAN ROWS ===');
-  console.log(projectRows);
 
   const updatedRows = await db
     .insert(dirtyProjects)
@@ -40,9 +34,6 @@ async function markProjectsDirty(projectRows) {
       projectId: dirtyProjects.projectId,
       action: dirtyProjects.action,
     });
-
-  console.log('=== UPDATED ROWS ===');
-  console.log(updatedRows);
 
   // Attempt cloud sync if any rows changed
   if (updatedRows.length > 0) {
@@ -151,19 +142,13 @@ export async function updateExpenseInDb(expenseId, updatedFields) {
 
 export async function deleteExpenseFromDb(expenseId) {
   if (!expenseId) return;
-  const deletedRows = await db
+  const updatedRows = await db
     .delete(expenses)
     .where(eq(expenses.id, expenseId))
     .returning({ projectId: expenses.projectId });
 
-  // Add deletion action to rows
-  const filledRows = deletedRows.map((row) => ({
-    projectId: row.projectId,
-    action: 'delete',
-  }));
-
   // Mark project associated with expense dirty
-  await markProjectsDirty(filledRows);
+  await markProjectsDirty(updatedRows);
 }
 
 export async function insertTaskToDb(projectId, name) {
@@ -195,17 +180,11 @@ export async function updateTaskInDb(taskId, updatedFields) {
 
 export async function deleteTaskFromDb(taskId) {
   if (!taskId) return;
-  const deletedRows = await db
+  const updatedRows = await db
     .delete(tasks)
     .where(eq(tasks.id, taskId))
     .returning({ projectId: tasks.projectId });
 
-  // Add deletion action to rows
-  const filledRows = deletedRows.map((row) => ({
-    projectId: row.projectId,
-    action: 'delete',
-  }));
-
   // Mark project associated with task dirty
-  await markProjectsDirty(filledRows);
+  await markProjectsDirty(updatedRows);
 }

@@ -11,7 +11,7 @@ export const projects = sqliteTable('projects', {
     .notNull(),
   createdAt: integer('created_at')
     .notNull()
-    .$defaultFn(() => new Date()), // Sets createdAt to Date.now() on creation
+    .$defaultFn(() => Date.now()), // Sets createdAt to Date.now() on creation
 });
 
 // Projects pending cloud sync
@@ -20,8 +20,8 @@ export const dirtyProjects = sqliteTable('dirty_projects', {
   action: text('action').notNull().default('upsert'), // 'upsert' | 'delete'
   updatedAt: integer('updated_at')
     .notNull()
-    .$defaultFn(() => new Date())
-    .$onUpdate(() => new Date()),
+    .$defaultFn(() => Date.now())
+    .$onUpdate(() => Date.now()),
 });
 
 // Expenses. If parent project is deleted, expense is automatically deleted
