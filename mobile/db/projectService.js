@@ -5,15 +5,17 @@ import { projects, expenses, tasks, dirtyProjects } from './schema';
 import { syncPendingProjects } from './syncService';
 import { sql } from 'drizzle-orm';
 
+// TODO in future: Use transactions with db edits
+
 // Mark given array of projects
-// TODO: Use transactions with db edits
 async function markProjectsDirty(projectRows) {
   // Return if given empty array
   if (!projectRows || projectRows.length === 0) {
     return;
   }
 
-  // Select only 'projectId' and 'action' fields from rows. if no 'action' field exists, add one with default value of 'upsert'
+  // Select only 'projectId' and 'action' fields from rows.
+  // If no 'action' field exists, add one with default value of 'upsert'
   const cleanProjectRows = projectRows.map(({ projectId, action }) => ({
     projectId,
     action: action ?? 'upsert',
@@ -27,8 +29,6 @@ async function markProjectsDirty(projectRows) {
       set: {
         action: sql`excluded.action`,
       },
-      // Only update if action value changed
-      // where: sql`${dirtyProjects.action} IS NOT excluded.action`,
     })
     .returning({
       projectId: dirtyProjects.projectId,
@@ -84,7 +84,7 @@ export async function deleteProjectFromDb(projectId) {
     .where(eq(projects.id, projectId))
     .returning({ projectId: projects.id });
 
-  // Add deletion action to rows
+  // Add deletion action to rows for marking projects dirty
   const filledRows = deletedRows.map((row) => ({
     projectId: row.projectId,
     action: 'delete',

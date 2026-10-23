@@ -21,6 +21,7 @@ const ActiveProjectContext = createContext(null);
 export function ActiveProjectProvider({ children }) {
   const [activeProjectId, setActiveProjectId] = useState(null);
 
+  // Prevent id from being undefined
   const targetId = activeProjectId ?? '';
 
   // Get project from database when activeProjectId value changes or projects table changes in SQLite
@@ -57,7 +58,7 @@ export function ActiveProjectProvider({ children }) {
   const tasksCompleted =
     tasksRows?.filter((task) => task.status === 'Completed').length || 0;
 
-  // Combine projectRows, tasksRows and expensesRows to one object
+  // Object containing currently selected project. Other components read this object
   const activeProject =
     activeProjectId && projectRows?.[0]
       ? {
@@ -74,10 +75,12 @@ export function ActiveProjectProvider({ children }) {
         }
       : null;
 
+  // Change active project, refreshing ActiveProjectProvider
   const selectProject = (id) => {
     setActiveProjectId(id);
   };
 
+  // Project editing functions which call projectService
   const editProject = async (projectId, updatedFields) => {
     if (!activeProjectId) return;
     await updateProjectInDb(projectId, updatedFields);
@@ -134,6 +137,7 @@ export function ActiveProjectProvider({ children }) {
   );
 }
 
+// React useContext
 export function useActiveProject() {
   return useContext(ActiveProjectContext);
 }

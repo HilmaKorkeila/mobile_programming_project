@@ -19,8 +19,9 @@ export async function syncPendingProjects() {
       .from(dirtyProjects)
       .where(eq(dirtyProjects.action, 'delete'));
 
+    // Handle every deleted project
     for (const project of deleteProjects) {
-      // Send delete request to cloud
+      // Send delete request to cloud for sync
       const response = await fetch(
         `${API_BASE_URL}/sync/projects/${project.projectId}`,
         {
@@ -56,6 +57,9 @@ export async function syncPendingProjects() {
         ),
       );
 
+    // Sync project upsert
+
+    // Handle every updated project
     for (const project of upsertProjects) {
       // Get tasks associated with project
       const projectTasks = await db
@@ -63,6 +67,7 @@ export async function syncPendingProjects() {
         .from(tasks)
         .where(eq(tasks.projectId, project.id));
 
+      // Get expenses associated with project
       const projectExpenses = await db
         .select()
         .from(tasks)
@@ -75,7 +80,7 @@ export async function syncPendingProjects() {
         expenses: projectExpenses,
       };
 
-      // Send put request to cloud
+      // Send put request to cloud for sync
       const response = await fetch(
         `${API_BASE_URL}/sync/projects/${project.id}`,
         {
