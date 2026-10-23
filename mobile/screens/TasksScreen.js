@@ -60,7 +60,7 @@ export default function TasksScreen({ navigation }) {
   return (
     <View style={gs.mainContainer}>
       {/* Small heading above the main title */}
-      <Text style={styles.smallTitle}>{activeProject?.name}</Text>
+      <Text style={gs.smallTitle}>{activeProject?.name}</Text>
 
       {/* Main title of the screen */}
       <Text style={gs.mainTitle}>Tasks</Text>
