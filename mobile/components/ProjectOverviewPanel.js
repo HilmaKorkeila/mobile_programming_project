@@ -26,7 +26,7 @@ export default function ProjectOverviewPanel() {
         {/* Expenses */}
         <Text style={[gs.colorTextMain, styles.description]}>
           {activeProject?.totalExpenses
-            ? centsToEuros(activeProject?.totalExpenses)
+            ? 'Expenses ' + centsToEuros(activeProject?.totalExpenses)
             : 'No expenses'}
         </Text>
 
