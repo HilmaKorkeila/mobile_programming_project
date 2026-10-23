@@ -3,12 +3,17 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 
+// Routes
 import syncRoutes from './routes/syncRoutes.js';
 
-// Express app with cors and json enabled
+// Middleware
+import { requestLogger } from './middlewares/requestLogger.js';
+
+// Express app with cors and json enabled. Enable requestLogger middleware
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(requestLogger);
 
 // MongoDB connection
 mongoose
