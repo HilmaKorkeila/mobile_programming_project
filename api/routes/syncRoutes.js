@@ -10,9 +10,34 @@ import { validate } from '../middlewares/validate.js';
 import {
   upsertProjectSchema,
   deleteProjectSchema,
+  getProjectSchema,
 } from '../validators/projectValidator.js';
 
 const router = express.Router();
+
+// Get project
+router.get('/projects/:id', validate(getProjectSchema), async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Exclude MongoDB internal _id and __v fields
+    const project = await Project.findOne({ id }).select('-_id -__v').lean();
+
+    if (!project) {
+      return res.status(404).json({
+        error: 'Project not found',
+      });
+    }
+
+    return res.status(200).json(project);
+  } catch (error) {
+    console.error(`Error fetching project ${id}:`, error);
+    return res.status(500).json({
+      error: 'Failed to retrieve project',
+      details: error.message,
+    });
+  }
+});
 
 // Upsert a project
 router.put('/projects/:id', validate(upsertProjectSchema), async (req, res) => {
@@ -31,7 +56,7 @@ router.put('/projects/:id', validate(upsertProjectSchema), async (req, res) => {
       { id },
       { $set: projectData },
       {
-        new: true,
+        returnDocument: 'after',
         upsert: true,
         runValidators: true,
       },

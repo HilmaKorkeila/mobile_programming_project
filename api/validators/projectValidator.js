@@ -24,7 +24,14 @@ export const taskSchema = z.object({
   status: z.string().default('Not complete'),
 });
 
-// PUT /api/sync/projects/:id validation
+// GET /sync/projects/:id validation
+export const getProjectSchema = z.object({
+  params: z.object({
+    id: z.uuid({ message: 'Project id in URL parameter must be a valid UUID' }),
+  }),
+});
+
+// PUT /sync/projects/:id validation
 export const upsertProjectSchema = z.object({
   params: z.object({
     id: z.uuid({ message: 'Project id in URL parameter must be a valid UUID' }),
@@ -46,7 +53,7 @@ export const upsertProjectSchema = z.object({
   }),
 });
 
-// DELETE /api/sync/projects/:id validation
+// DELETE /sync/projects/:id validation
 export const deleteProjectSchema = z.object({
   params: z.object({
     id: z.uuid({ message: 'Project id in URL parameter must be a valid UUID' }),
