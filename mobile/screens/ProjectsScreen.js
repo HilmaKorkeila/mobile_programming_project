@@ -50,7 +50,7 @@ export default function ProjectsScreen({ navigation }) {
   return (
     <View style={gs.mainContainer}>
       {/* Main title of the screen */}
-      <Text style={styles.title}>My projects</Text>
+      <Text style={gs.mainTitle}>My projects</Text>
 
       {/* Display all projects from the local SQLite database */}
       {/* Each project is displayed using the ProjectCard component */}
@@ -90,22 +90,6 @@ export default function ProjectsScreen({ navigation }) {
 
 // Styles for ProjectsScreen
 const styles = StyleSheet.create({
-  // Main screen title
-  title: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#242B28',
-    marginBottom: 24,
-  },
-
-  // Small heading above the main title
-  smallTitle: {
-    fontSize: 12,
-    fontWeight: '400',
-    color: '#242B28',
-    marginBottom: 8,
-  },
-
   // Message displayed when there are no projects
   emptyText: {
     fontSize: 14,

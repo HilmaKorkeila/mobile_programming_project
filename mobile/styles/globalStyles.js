@@ -15,33 +15,61 @@ export const globalStyles = StyleSheet.create({
     paddingBottom: 30,
   },
 
+  // Headers
+  mainTitle: {
+    fontSize: typography.sizes.screenTitle,
+    fontWeight: typography.weights.bold,
+    color: colors.textMain,
+    marginBottom: 24,
+  },
+  smallTitle: {
+    fontSize: typography.sizes.projectName,
+    fontWeight: typography.weights.regular,
+    color: colors.textMain,
+    marginBottom: 8,
+  },
+
   // Buttons
-  button: {
+  buttonPrimary: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
+    borderRadius: 6,
+    padding: 12,
+    marginBottom: 10,
+    alignItems: 'center',
+  },
+  buttonSecondary: {
+    backgroundColor: colors.blank,
+    borderColor: colors.cardProjectBorder,
     borderWidth: 1,
     borderRadius: 6,
     padding: 12,
     marginBottom: 10,
     alignItems: 'center',
   },
-  buttonPrimary: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
-  },
-  buttonSecondary: {
-    backgroundColor: colors.blank,
-    borderColor: colors.cardProjectBorder,
-    borderWidth: 1,
-  },
   buttonDanger: {
     backgroundColor: colors.dangerBackground,
     borderColor: colors.dangerText,
-  },
-  buttonText: {
-    fontWeight: typography.weights.medium,
-    fontSize: typography.sizes.body,
+    borderWidth: 1,
+    borderRadius: 6,
+    padding: 12,
+    marginBottom: 10,
+    alignItems: 'center',
   },
   buttonTextSecondary: {
+    fontWeight: typography.weights.medium,
+    fontSize: typography.sizes.body,
     color: colors.textMain,
+  },
+  buttonTextPrimary: {
+    fontWeight: typography.weights.medium,
+    fontSize: typography.sizes.body,
+    color: colors.blank,
+  },
+  buttonTextDanger: {
+    color: colors.dangerText,
+    fontWeight: typography.weights.medium,
+    fontSize: typography.sizes.body,
   },
 
   // Big currency values

@@ -57,10 +57,10 @@ export default function ExpensesScreen({ route, navigation }) {
   return (
     <View style={gs.mainContainer}>
       {/* Small heading above the main title */}
-      <Text style={styles.smallTitle}>{activeProject?.name}</Text>
+      <Text style={gs.smallTitle}>{activeProject?.name}</Text>
 
       {/* Main title of the screen */}
-      <Text style={styles.title}>Expenses</Text>
+      <Text style={gs.mainTitle}>Expenses</Text>
 
       {/* Total expenses */}
       <Text style={styles.label}>Total expenses</Text>
@@ -96,20 +96,13 @@ export default function ExpensesScreen({ route, navigation }) {
       </View>
 
       {/* Button for adding an expense */}
-      <Pressable style={styles.addButton} onPress={() => openEditModal()}>
-        <Text style={[styles.buttonText, styles.addButtonText]}>
-          Add expense
-        </Text>
+      <Pressable style={gs.buttonPrimary} onPress={() => openEditModal()}>
+        <Text style={gs.buttonTextPrimary}>Add expense</Text>
       </Pressable>
 
       {/* Button for returning to Dashboard */}
-      <Pressable
-        style={[gs.button, gs.buttonSecondary]}
-        onPress={() => navigation.goBack()}
-      >
-        <Text style={[gs.buttonText, gs.buttonTextSecondary]}>
-          Back to Dashboard
-        </Text>
+      <Pressable style={gs.buttonSecondary} onPress={() => navigation.goBack()}>
+        <Text style={gs.buttonTextSecondary}>Back to Dashboard</Text>
       </Pressable>
 
       {/* Modal for adding/editing an expense */}
@@ -140,22 +133,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  // Main screen title
-  title: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#242B28',
-    marginBottom: 24,
-  },
-
-  // Small heading above the main title
-  smallTitle: {
-    fontSize: 12,
-    fontWeight: '400',
-    color: '#242B28',
-    marginBottom: 8,
-  },
-
   label: {
     fontSize: 14,
     fontWeight: '400',
@@ -178,27 +155,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#242B28',
     flex: 1,
-  },
-
-  // Button for adding a new expense
-  addButton: {
-    backgroundColor: '#285943',
-    borderRadius: 6,
-    padding: 12,
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-
-  addButtonText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#FFFFFF',
-  },
-
-  // Text inside the add expense button
-  buttonText: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: '500',
   },
 });

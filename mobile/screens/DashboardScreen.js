@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Pressable, Alert } from 'react-native';
+import { View, Text, Pressable, Alert } from 'react-native';
 import { useActiveProject } from '../db/ActiveProjectContext';
 
 import { globalStyles as gs } from '../styles/globalStyles';
@@ -45,9 +45,9 @@ export default function DashboardScreen({ route, navigation }) {
   return (
     <View style={gs.mainContainer}>
       {/* Small heading above the main title */}
-      <Text style={styles.smallTitle}>{activeProject?.name}</Text>
+      <Text style={gs.smallTitle}>{activeProject?.name}</Text>
       {/* Main title of the screen */}
-      <Text style={styles.title}>Dashboard</Text>
+      <Text style={gs.mainTitle}>Dashboard</Text>
 
       {/* Budget */}
       <NavigationCard
@@ -86,38 +86,19 @@ export default function DashboardScreen({ route, navigation }) {
       <ProjectOverviewPanel />
 
       {/* Button for removing the selected project */}
-      <Pressable style={[gs.button, gs.buttonDanger]} onPress={confirmDelete}>
-        <Text style={[gs.colorDanger, gs.buttonText]}>Remove project</Text>
+      <Pressable style={gs.buttonDanger} onPress={confirmDelete}>
+        <Text style={gs.buttonTextDanger}>Remove project</Text>
       </Pressable>
 
       {/* Button going back to project list */}
       <Pressable
-        style={[gs.button, gs.buttonSecondary]}
+        style={gs.buttonSecondary}
         onPress={() => {
           navigation.goBack();
         }}
       >
-        <Text style={[gs.colorTextMain, gs.buttonText]}>Back to projects</Text>
+        <Text style={gs.buttonTextSecondary}>Back to projects</Text>
       </Pressable>
     </View>
   );
 }
-
-// Styles for DashboardScreen
-const styles = StyleSheet.create({
-  // Main screen title
-  title: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#242B28',
-    marginBottom: 24,
-  },
-
-  // Small heading above the main title
-  smallTitle: {
-    fontSize: 12,
-    fontWeight: '400',
-    color: '#242B28',
-    marginBottom: 8,
-  },
-});

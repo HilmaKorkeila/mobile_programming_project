@@ -29,10 +29,10 @@ export default function BudgetScreen({ route, navigation }) {
   return (
     <View style={gs.mainContainer}>
       {/* Small heading above the main title */}
-      <Text style={styles.smallTitle}>{activeProject?.name}</Text>
+      <Text style={gs.smallTitle}>{activeProject?.name}</Text>
 
       {/* Main title of the screen */}
-      <Text style={styles.title}>Budget</Text>
+      <Text style={gs.mainTitle}>Budget</Text>
 
       {/* Total budget */}
       <Text style={styles.label}>Total budget</Text>
@@ -57,16 +57,13 @@ export default function BudgetScreen({ route, navigation }) {
       </View>
 
       {/* Button for editing the budget */}
-      <Pressable
-        style={styles.editButton}
-        onPress={() => setModalVisible(true)}
-      >
-        <Text style={styles.editButtonText}>Edit budget</Text>
+      <Pressable style={gs.buttonPrimary} onPress={() => setModalVisible(true)}>
+        <Text style={gs.buttonTextPrimary}>Edit budget</Text>
       </Pressable>
 
       {/* Button for returning to Dashboard */}
-      <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Text style={styles.backButtonText}>Back to Dashboard</Text>
+      <Pressable style={gs.buttonSecondary} onPress={() => navigation.goBack()}>
+        <Text style={gs.buttonTextSecondary}>Back to Dashboard</Text>
       </Pressable>
 
       {/* Modal for editing the project budget */}
@@ -82,22 +79,6 @@ export default function BudgetScreen({ route, navigation }) {
 
 // Styles for BudgetScreen
 const styles = StyleSheet.create({
-  // Main screen title
-  title: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#242B28',
-    marginBottom: 24,
-  },
-
-  // Small heading above the main title
-  smallTitle: {
-    fontSize: 12,
-    fontWeight: '400',
-    color: '#242B28',
-    marginBottom: 8,
-  },
-
   // Project name
   projectName: {
     fontSize: 14,
@@ -112,39 +93,5 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: '#242B28',
     marginBottom: 8,
-  },
-
-  // Edit budget button
-  editButton: {
-    backgroundColor: '#285943',
-    borderRadius: 6,
-    padding: 12,
-    alignItems: 'center',
-    marginTop: 16,
-    marginBottom: 8,
-  },
-
-  // Text inside the edit button
-  editButtonText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#FFFFFF',
-  },
-
-  // Back to Dashboard button
-  backButton: {
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#D8DDD7',
-    borderRadius: 6,
-    padding: 12,
-    alignItems: 'center',
-  },
-
-  // Text inside the back button
-  backButtonText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#242B28',
   },
 });

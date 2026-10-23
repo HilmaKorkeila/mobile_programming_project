@@ -63,7 +63,7 @@ export default function TasksScreen({ navigation }) {
       <Text style={styles.smallTitle}>{activeProject?.name}</Text>
 
       {/* Main title of the screen */}
-      <Text style={styles.title}>Tasks</Text>
+      <Text style={gs.mainTitle}>Tasks</Text>
 
       {/* Tasks list title */}
       <Text style={styles.label}>Tasks list</Text>
@@ -111,13 +111,8 @@ export default function TasksScreen({ navigation }) {
       </Pressable>
 
       {/* Button for returning to Dashboard */}
-      <Pressable
-        style={[gs.button, gs.buttonSecondary]}
-        onPress={() => navigation.goBack()}
-      >
-        <Text style={[gs.buttonText, gs.buttonTextSecondary]}>
-          Back to Dashboard
-        </Text>
+      <Pressable style={gs.buttonSecondary} onPress={() => navigation.goBack()}>
+        <Text style={gs.buttonTextSecondary}>Back to Dashboard</Text>
       </Pressable>
 
       {/* Modal for adding a new task */}
@@ -148,22 +143,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#EBE9E5',
     borderRadius: 6,
-  },
-
-  // Main screen title
-  title: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#242B28',
-    marginBottom: 24,
-  },
-
-  // Small heading above the main title
-  smallTitle: {
-    fontSize: 12,
-    fontWeight: '400',
-    color: '#242B28',
-    marginBottom: 8,
   },
 
   // Tasks card title
